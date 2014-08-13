@@ -13,3 +13,5 @@ It requires Dan Myers's [Amazon Route 53 PHP Class](http://sourceforge.net/proje
 IncR53.php takes your AWS ID and secret key.
 
 The main file ddns53.php needs the Hosted Zone ID that you find in your AWS Management Console.
+
+Just put all three files into the same directory and run "php ddns53.php"

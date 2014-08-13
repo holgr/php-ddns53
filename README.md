@@ -10,6 +10,6 @@ Usage
 
 It requires Dan Myers's [Amazon Route 53 PHP Class](http://sourceforge.net/projects/php-r53/) to work.
 
-IncR53.php takes your AWS ID and secret key
+IncR53.php takes your AWS ID and secret key.
 
 The main file ddns53.php needs the Hosted Zone ID that you find in your AWS Management Console.

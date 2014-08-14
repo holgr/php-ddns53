@@ -34,7 +34,7 @@ function updateIP ($hostname, $newIP, $oldIP, $type = 'A', $ttl = 60) {
 $recordSet = $r53->listResourceRecordSets('/hostedzone/YOUR-HOSTED-ZONE-ID');
 //print_r($recordSet['ResourceRecordSets']);
 
-$hostname = 'pi.holgr.org.';
+$hostname = 'YOUR-HOSTNAME';
 for ($i = 0; $i < count($recordSet['ResourceRecordSets']); $i++) {
   if ($recordSet['ResourceRecordSets'][$i]['Name'] == $hostname) {
 //    print_r($recordSet['ResourceRecordSets'][$i]);

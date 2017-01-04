@@ -1,6 +1,9 @@
 <?php
 require_once('r53.php');
 require_once('IncR53.php');
+$awszoneid='/hostedzone/'.$awszoneid;
+
+
 $r53 = new Route53($awsid, $awskey);
 
 function getPublicIP() { 
@@ -21,22 +24,24 @@ function getPublicIP() {
   return $ip;
 }
 
-function updateIP ($hostname, $newIP, $oldIP, $type = 'A', $ttl = 60) {
+function updateIP ($hostname, $newIP, $oldIP, $awszoneid, $type = 'A', $ttl = 60 ) {
   global $r53;
   $delete = $r53->prepareChange('DELETE', $hostname, $type, $ttl, $oldIP);
-  $result = $r53->changeResourceRecordSets('/hostedzone/YOUR-HOSTED-ZONE-ID', $delete);
+  $result = $r53->changeResourceRecordSets($awszoneid, $delete);
   $create = $r53->prepareChange('CREATE', $hostname, $type, $ttl, $newIP);
-  $result = $r53->changeResourceRecordSets('/hostedzone/YOUR-HOSTED-ZONE-ID', $create);
+  $result = $r53->changeResourceRecordSets($awszoneid, $create);
 }
 
 //print_r($r53->listHostedZones());
-//print_r($r53->getHostedZone('/hostedzone/YOUR-HOSTED-ZONE-ID'));
-$recordSet = $r53->listResourceRecordSets('/hostedzone/YOUR-HOSTED-ZONE-ID');
+//print_r($r53->getHostedZone($awszoneid));
+
+
+$recordSet = $r53->listResourceRecordSets($awszoneid);
 //print_r($recordSet['ResourceRecordSets']);
 
-$hostname = 'YOUR-HOSTNAME';
 for ($i = 0; $i < count($recordSet['ResourceRecordSets']); $i++) {
   if ($recordSet['ResourceRecordSets'][$i]['Name'] == $hostname) {
+
 //    print_r($recordSet['ResourceRecordSets'][$i]);
 //    echo $recordSet['ResourceRecordSets'][$i]['Name'];
     $oldIP = $recordSet['ResourceRecordSets'][$i]['ResourceRecords'][0];
@@ -47,13 +52,11 @@ for ($i = 0; $i < count($recordSet['ResourceRecordSets']); $i++) {
 
 $newIP = getPublicIP();
 
-
-
 if ($oldIP == $newIP) {
-//  echo "No change necessary.";
+//  echo "No change necessary.\n";
 } else {
-  echo "Updating IP from ".$oldIP." to ".$newIP;
-  updateIP($hostname, $newIP, $oldIP);
+  echo "Updating ".$hostname." from ".$oldIP." to ".$newIP."\n";
+  updateIP($hostname, $newIP, $oldIP, $awszoneid);
 //  echo " done.";
 }
 ?>
